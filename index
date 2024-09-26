@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Exchange Rate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .exchange-rate-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .rate-box {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+        .currency {
+            margin-right: 20px;
+        }
+        .value {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .change {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="exchange-rate-container">
+    <div class="rate-box">
+        <div class="currency">USD</div>
+        <div class="value" id="usd-rate">23,695 đ</div>
+        <div class="change" id="usd-change">▲ 2.00 (0.01%)</div>
+    </div>
+</div>
+
+<script>
+    async function fetchExchangeRate() {
+        // Use an API to get real-time exchange rates
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        const rateVND = data.rates.VND;  // Assume the API returns VND rate
+
+        // Update the DOM
+        document.getElementById('usd-rate').textContent = new Intl.NumberFormat('vi-VN').format(rateVND) + ' đ';
+        
+        // Optional: Add logic to show changes in percentage or amount
+        // For now, it shows a static change like in the image
+        document.getElementById('usd-change').textContent = '▲ 2.00 (0.01%)';
+    }
+
+    // Fetch exchange rate when the page loads
+    fetchExchangeRate();
+
+    // Optionally refresh the rate every few minutes
+    setInterval(fetchExchangeRate, 60000);  // Refresh every 60 seconds
+</script>
+
+</body>
+</html>
